@@ -59,12 +59,26 @@ jobs:
           output_file_path: console,checkov-dockerfile.sarif
           soft_fail: true
 
-      - name: "Upload SARIF ke GitHub Security tab"
+      - name: "Upload SARIF Terraform"
         uses: github/codeql-action/upload-sarif@v3
         if: always() && hashFiles('checkov-terraform.sarif') != ''
         with:
           sarif_file: checkov-terraform.sarif
           category: "checkov-terraform"
+
+      - name: "Upload SARIF Kubernetes"
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('checkov-k8s.sarif') != ''
+        with:
+          sarif_file: checkov-k8s.sarif
+          category: "checkov-k8s"
+
+      - name: "Upload SARIF Dockerfile"
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('checkov-dockerfile.sarif') != ''
+        with:
+          sarif_file: checkov-dockerfile.sarif
+          category: "checkov-dockerfile"
 
       - name: "Block pipeline jika ditemukan pelanggaran di Terraform"
         if: always() && steps.checkov_terraform.outcome == 'failure'
