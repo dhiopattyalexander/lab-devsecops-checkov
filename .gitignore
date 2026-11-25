@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.sarif
+scan-*.json
+*.json
+parse_*.py
+compare_*.py
+screenshots/*.png
+!screenshots/.gitkeep
