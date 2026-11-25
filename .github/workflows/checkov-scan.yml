@@ -1,6 +1,6 @@
-name: "IaC Security Scan dengan Checkov"
+name: "IaC Security Scan"
 
-on:
+"on":
   push:
     branches:
       - main
@@ -19,14 +19,14 @@ permissions:
 
 jobs:
   checkov-scan:
-    name: "Checkov Security Scan"
+    name: "Security Scan"
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v4
 
       - name: "Run Checkov - Terraform"
-        id: checkov-terraform
+        id: checkov_terraform
         uses: bridgecrewio/checkov-action@master
         continue-on-error: true
         with:
@@ -37,7 +37,7 @@ jobs:
           soft_fail: false
 
       - name: "Run Checkov - Kubernetes"
-        id: checkov-k8s
+        id: checkov_k8s
         uses: bridgecrewio/checkov-action@master
         continue-on-error: true
         with:
@@ -48,7 +48,7 @@ jobs:
           soft_fail: true
 
       - name: "Run Checkov - Dockerfile"
-        id: checkov-dockerfile
+        id: checkov_dockerfile
         uses: bridgecrewio/checkov-action@master
         continue-on-error: true
         with:
@@ -66,13 +66,13 @@ jobs:
           category: "checkov-terraform"
 
       - name: "Block pipeline jika ditemukan pelanggaran di Terraform"
-        if: steps.checkov-terraform.outcome == 'failure'
+        if: always() && steps.checkov_terraform.outcome == 'failure'
         run: |
           echo "❌ Checkov menemukan pelanggaran keamanan pada Terraform!"
           echo "Periksa log job atau tab Security -> Code scanning untuk detail."
           exit 1
 
       - name: "Report sukses"
-        if: steps.checkov-terraform.outcome == 'success'
+        if: always() && steps.checkov_terraform.outcome == 'success'
         run: |
           echo "✅ Seluruh pemeriksaan Checkov pada Terraform PASSED!"
