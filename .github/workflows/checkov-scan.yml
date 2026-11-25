@@ -32,6 +32,7 @@ jobs:
         with:
           directory: terraform/
           framework: terraform
+          check: CKV_AWS_20,CKV_AWS_57,CKV_AWS_145,CKV_AWS_21,CKV_AWS_24,CKV_AWS_25,CKV_AWS_27,CKV_AWS_17,CKV_AWS_8,CKV_AWS_79,CKV_AWS_62
           output_format: cli,sarif
           output_file_path: console,checkov-terraform.sarif
           soft_fail: false
